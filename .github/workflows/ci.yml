@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+    paths:
+      - '**.java'
+      - '**.properties'
+      - '**.xml'
+      - '**.yml'
+      - '**.json'
+
+  push:
+      branches: 
+          - main
+      paths:
+          - '**.java'
+          - '**.properties'
+          - '**.xml'
+          - '**.yml'
+          - '**.json'
+
+jobs:
+  build:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+          with:
+            fetch-depth: 0  
+
+        - name: Setup Java
+          uses: actions/setup-java@v3
+          with:
+            distribution: 'temurin'
+            java-version: '17'
+
+        - name: Build with Maven
+          run: mvn clean install
+        
+        - name: Run tests
+          run: mvn test
+    
+        - name: Check test coverage
+          run: mvn clean verify
+
+        - name: Cache Maven packages
+          uses: actions/cache@v3
+          with:
+            path: ~/.m2
+            key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+            restore-keys: ${{ runner.os }}-m2
