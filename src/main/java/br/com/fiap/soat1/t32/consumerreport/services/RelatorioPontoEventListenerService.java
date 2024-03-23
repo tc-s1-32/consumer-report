@@ -68,9 +68,6 @@ public class RelatorioPontoEventListenerService {
                 totalMinutos += espelhoPontoDiario.getTotalMinutos();
                 espelhoPontoMensal.setTotalMinutos(totalMinutos);
             }
-
-            log.info("Pontos mes passado:", pontosMesPassado.size());
-
         }catch (Exception ex){
 			log.error("Falha ao relatorio ponto", ex);
 		}
