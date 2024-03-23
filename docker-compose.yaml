@@ -1,0 +1,30 @@
+version: '3.3'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+      RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT: "false"
+    networks: 
+      - backend
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - 8080:8080
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    networks: 
+      - backend
+
+networks: 
+  backend:
+    driver: bridge
