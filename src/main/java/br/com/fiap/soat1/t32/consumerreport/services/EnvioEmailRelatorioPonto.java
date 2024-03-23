@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import br.com.fiap.soat1.t32.consumerreport.models.user.presenters.EspelhoPontoMensal;
 import jakarta.mail.internet.MimeMessage;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class EnvioEmailRelatorioPonto {
 
     @Autowired
