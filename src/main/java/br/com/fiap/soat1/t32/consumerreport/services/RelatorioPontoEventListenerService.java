@@ -46,7 +46,7 @@ public class RelatorioPontoEventListenerService {
 
             EspelhoPontoMensal espelhoPontoMensal = new EspelhoPontoMensal();
             espelhoPontoMensal.setEspelhoPontoDiarios(new ArrayList<>());
-            espelhoPontoMensal.setTotalHoras(0);
+            espelhoPontoMensal.setTotalMinutos(0);
 
             for (LocalDate data = primeiroDiaMesPassado; !data.isAfter(ultimoDiaMesPassado); data = data.plusDays(1)) {
 
@@ -60,13 +60,13 @@ public class RelatorioPontoEventListenerService {
                 var espelhoPontoDiario = EspelhoPontoDiario.builder()
                     .data(dataDiaInicial)
                     .pontos(pontosDia)
-                    .totalHoras(calcularTotalHorasDia(pontosDia))
+                    .totalMinutos(calcularTotalMinutosDia(pontosDia))
                     .build();
 
                 espelhoPontoMensal.getEspelhoPontoDiarios().add(espelhoPontoDiario);
-                long totalHoras = espelhoPontoMensal.getTotalHoras();
-                totalHoras += espelhoPontoDiario.getTotalHoras();
-                espelhoPontoMensal.setTotalHoras(totalHoras);
+                long totalMinutos = espelhoPontoMensal.getTotalMinutos();
+                totalMinutos += espelhoPontoDiario.getTotalMinutos();
+                espelhoPontoMensal.setTotalMinutos(totalMinutos);
             }
 
             log.info("Pontos mes passado:", pontosMesPassado.size());
@@ -76,8 +76,8 @@ public class RelatorioPontoEventListenerService {
 		}
     }
 
-    public long calcularTotalHorasDia(List<Ponto> pontosDia) {
-        Long totalHoras = 0L;
+    public long calcularTotalMinutosDia(List<Ponto> pontosDia) {
+        Long totalMinutos = 0L;
 
         LocalDateTime tempo1 = null;
         LocalDateTime tempo2 = null;
@@ -93,12 +93,12 @@ public class RelatorioPontoEventListenerService {
             if (tempo1 != null && tempo2 != null){
                 if (tempo1.isBefore(tempo2)) {
                     Duration duracao = Duration.between(tempo1, tempo2);
-                    totalHoras += duracao.toHours();;
+                    totalMinutos += duracao.toMinutes();
                 } 
             }
         }
 
-        return totalHoras;
+        return totalMinutos;
     }
 
 }

@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class EspelhoPontoMensal {
     private List<EspelhoPontoDiario> espelhoPontoDiarios;
-    private long totalHoras;
+    private long totalMinutos;
 }

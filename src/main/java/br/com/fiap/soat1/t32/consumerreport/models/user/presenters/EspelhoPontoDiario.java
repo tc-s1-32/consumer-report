@@ -19,5 +19,5 @@ public class EspelhoPontoDiario {
 
     private List<Ponto> pontos;
 
-    private long totalHoras;
+    private long totalMinutos;
 }
