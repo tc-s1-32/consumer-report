@@ -19,9 +19,5 @@ public class EspelhoPontoDiario {
 
     private List<Ponto> pontos;
 
-    private LocalDateTime entrada;
-
-    private LocalDateTime saida;
-
     private long totalHoras;
 }
