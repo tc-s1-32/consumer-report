@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static br.com.fiap.soat1.t32.consumerreport.utils.DateTimeUtils.*;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,31 +17,58 @@ import lombok.NoArgsConstructor;
 public class EspelhoPontoMensal {
     
     private List<EspelhoPontoDiario> espelhoPontoDiarios;
+    private long totalHoras;
     private long totalMinutos;
+    private String nomeColaborador;
 
     public static String buildHtmlContent(EspelhoPontoMensal espelhoPontoMensal) {
         StringBuilder htmlContent = new StringBuilder();
 
-        // Início do documento HTML
         htmlContent.append("<html><body>");
 
-        // Adiciona informações sobre o espelhoPontoMensal
         htmlContent.append("<h1>Relatório Mensal de Ponto</h1>");
-        htmlContent.append("<p>Total de Minutos: ").append(espelhoPontoMensal.getTotalMinutos()).append("</p>");
 
-        // Adiciona informações sobre os espelhoPontoDiarios
+        htmlContent.append("<p>Colaborador(a): <strong>").append(espelhoPontoMensal.getNomeColaborador()).append("</strong></p>");
+
+        htmlContent.append("<hr/>");
+
         List<EspelhoPontoDiario> espelhoPontoDiarios = espelhoPontoMensal.getEspelhoPontoDiarios();
         for (EspelhoPontoDiario espelhoPontoDiario : espelhoPontoDiarios) {
-            htmlContent.append("<h2>Data: ").append(espelhoPontoDiario.getData()).append("</h2>");
-            htmlContent.append("<p>Total de Minutos: ").append(espelhoPontoDiario.getTotalMinutos()).append("</p>");
+            htmlContent.append("<h2>Data: ")
+                    .append(formatLocalDate(espelhoPontoDiario.getData(), DEFAULT_DATE_FORMAT))
+                    .append("</h2>");
 
-            // Adiciona informações sobre os pontos
             List<Ponto> pontos = espelhoPontoDiario.getPontos();
             for (Ponto ponto : pontos) {
-                htmlContent.append("<p>Data do Ponto: ").append(ponto.getData()).append("</p>");
-                htmlContent.append("<p>Evento Pronto: ").append(ponto.getEventoPronto()).append("</p>");
+                htmlContent.append("<p><strong>Marcação:</strong> ")
+                        .append(ponto.getEventoPronto())
+                        .append(" - ")
+                        .append(formatDateTime(ponto.getData(), DEFAULT_TIME_FORMAT))
+                        .append("</p>");
             }
+
+            htmlContent.append("<p>Horas Trabalhadas: ")
+                    .append(espelhoPontoDiario.getTotalHoras());
+
+            if(espelhoPontoDiario.getTotalMinutos() > 0) {
+                htmlContent.append(":")
+                        .append(espelhoPontoDiario.getTotalMinutos());
+            }
+
+            htmlContent.append("</p>");
         }
+
+        htmlContent.append("<hr/>");
+
+        htmlContent.append("<p>Total de Horas Trabalhadas: ")
+                .append(espelhoPontoMensal.getTotalHoras());
+
+        if(espelhoPontoMensal.getTotalMinutos() > 0) {
+            htmlContent.append(":")
+                .append(espelhoPontoMensal.getTotalMinutos());
+        }
+
+        htmlContent.append("</p>");
 
         // Fim do documento HTML
         htmlContent.append("</body></html>");
